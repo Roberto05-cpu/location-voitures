@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block titre %}{{ titre }}{% endblock %}
+{% block contenu %}
+<div class="conteneur page-erreur">
+  <p class="gros">{{ code }}</p>
+  <h1>{{ titre }}</h1>
+  <p>{{ message }}</p>
+  <a class="btn btn-principal" href="{{ url_for('accueil') }}">Retour à l'accueil</a>
+</div>
+{% endblock %}

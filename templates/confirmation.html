@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "_macros.html" import resume_location %}
+{% block titre %}Demande enregistrée{% endblock %}
+{% block contenu %}
+<div class="conteneur">
+  <article class="ticket">
+    <div class="ticket-tete">
+      <h1>Demande enregistrée</h1>
+      <p style="margin:0">Votre code de suivi :</p>
+      <p class="code" style="margin:.2rem 0 0">{{ loc.reference }}</p>
+    </div>
+    <div class="ticket-corps">
+      {{ resume_location(loc) }}
+      <p class="discret">Notez ce code : avec votre numéro de téléphone, il vous permet de suivre votre réservation.</p>
+      <a class="btn btn-principal" href="{{ url_for('suivi') }}">Suivre ma réservation</a>
+    </div>
+  </article>
+</div>
+{% endblock %}

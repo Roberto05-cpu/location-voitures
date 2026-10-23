@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titre %}Location de véhicules à Douala{% endblock %} · RoadDouala</title>
+  <meta name="description" content="{% block description %}Louez une berline, un 4x4 ou un minibus à Douala, avec ou sans chauffeur. Réservation en ligne.{% endblock %}">
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+  <header class="entete">
+    <div class="conteneur">
+      <a class="marque" href="{{ url_for('accueil') }}">
+        <img src="{{ url_for('static', filename='images/favicon.svg') }}" alt="" width="34" height="34">
+        <strong>Road<span>Douala</span></strong>
+      </a>
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+      <nav class="menu" id="menu" aria-label="Navigation principale">
+        <ul>
+          <li><a href="{{ url_for('accueil') }}"{% if request.endpoint == 'accueil' %} aria-current="page"{% endif %}>Accueil</a></li>
+          <li><a href="{{ url_for('catalogue') }}"{% if request.endpoint in ('catalogue', 'fiche_vehicule') %} aria-current="page"{% endif %}>Véhicules</a></li>
+          <li><a href="{{ url_for('suivi') }}"{% if request.endpoint == 'suivi' %} aria-current="page"{% endif %}>Suivre ma réservation</a></li>
+          {% if admin_connecte %}
+          <li><a href="{{ url_for('tableau_de_bord') }}">Administration</a></li>
+          <li><form method="post" action="{{ url_for('deconnexion') }}"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="lien" type="submit">Déconnexion</button></form></li>
+          {% else %}
+          <li><a href="{{ url_for('connexion') }}">Espace agence</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+  {% if admin_connecte and request.path.startswith('/admin') %}
+  <nav class="barre-admin" aria-label="Administration">
+    <div class="conteneur">
+      <a href="{{ url_for('tableau_de_bord') }}"{% if request.endpoint == 'tableau_de_bord' %} aria-current="page"{% endif %}>Tableau de bord</a>
+      <a href="{{ url_for('admin_locations') }}"{% if request.endpoint == 'admin_locations' %} aria-current="page"{% endif %}>Locations</a>
+      <a href="{{ url_for('admin_vehicules') }}"{% if request.endpoint == 'admin_vehicules' %} aria-current="page"{% endif %}>Flotte</a>
+      <a href="{{ url_for('admin_entretiens') }}"{% if request.endpoint == 'admin_entretiens' %} aria-current="page"{% endif %}>Entretiens</a>
+      <a href="{{ url_for('admin_statistiques') }}"{% if request.endpoint == 'admin_statistiques' %} aria-current="page"{% endif %}>Statistiques</a>
+    </div>
+  </nav>
+  {% endif %}
+  <main id="contenu">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="conteneur messages" role="status">
+      {% for categorie, texte in messages %}<div class="message {{ categorie }}">{{ texte }}</div>{% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% block contenu %}{% endblock %}
+  </main>
+  <footer class="pied">
+    <div class="conteneur">
+      <p>RoadDouala · Location de véhicules avec ou sans chauffeur · Douala, Cameroun</p>
+    </div>
+  </footer>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

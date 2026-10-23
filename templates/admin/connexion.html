@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block titre %}Connexion à l'espace agence{% endblock %}
+{% block contenu %}
+<div class="conteneur">
+  <section class="panneau connexion" aria-labelledby="t-connexion">
+    <h1 id="t-connexion">Espace agence</h1>
+    <form method="post" data-valider novalidate>
+      <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+      <div class="champ">
+        <label for="login">Identifiant</label>
+        <input type="text" id="login" name="login" autocomplete="username" data-regle="requis" required>
+      </div>
+      <div class="champ">
+        <label for="mot_de_passe">Mot de passe</label>
+        <input type="password" id="mot_de_passe" name="mot_de_passe" autocomplete="current-password" data-regle="requis" required>
+      </div>
+      <button class="btn btn-secondaire btn-bloc" type="submit">Se connecter</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

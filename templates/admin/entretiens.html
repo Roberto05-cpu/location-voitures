@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block titre %}Entretiens{% endblock %}
+{% block contenu %}
+<div class="conteneur titre-page">
+  <h1>Entretiens</h1>
+  <div class="deux-colonnes">
+    <section class="panneau" aria-labelledby="t-alertes">
+      <h2 id="t-alertes">Vidanges à prévoir</h2>
+      <p class="discret">Véhicules ayant dépassé {{ '{:,}'.format(seuil).replace(',', ' ') }} km depuis leur dernière vidange.</p>
+      {% for a in alertes %}
+      <div class="alerte-ligne">
+        <div><strong>{{ a.marque }} {{ a.modele }}</strong> <span class="plaque"><span>{{ a.immatriculation }}</span></span><br>
+          <span class="discret">Compteur {{ a.kilometrage }} km · dernière vidange à {{ a.km_vidange }} km</span></div>
+        <span class="badge-alerte">+{{ a.depuis }} km</span>
+      </div>
+      {% else %}<p>Tous les véhicules sont à jour.</p>{% endfor %}
+    </section>
+
+    <section class="panneau" aria-labelledby="t-form">
+      <h2 id="t-form">Enregistrer un entretien</h2>
+      <form method="post" data-valider data-aujourdhui="{{ aujourdhui }}" novalidate>
+        <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+        <div class="champ{{ ' invalide' if erreurs.vehicule }}">
+          <label for="vehicule">Véhicule</label>
+          <select id="vehicule" name="vehicule" data-regle="requis" required>
+            <option value="">Choisir…</option>
+            {% for v in vehicules %}<option value="{{ v.id }}"{% if form.vehicule == v.id|string %} selected{% endif %}>{{ v.marque }} {{ v.modele }} – {{ v.immatriculation }} ({{ v.kilometrage }} km)</option>{% endfor %}
+          </select>
+          {% if erreurs.vehicule %}<p class="erreur-champ">{{ erreurs.vehicule }}</p>{% endif %}
+        </div>
+        <div class="grille-form">
+          <div class="champ{{ ' invalide' if erreurs.date }}">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" max="{{ aujourdhui }}" value="{{ form.date or aujourdhui }}" data-regle="requis" required>
+            {% if erreurs.date %}<p class="erreur-champ">{{ erreurs.date }}</p>{% endif %}
+          </div>
+          <div class="champ{{ ' invalide' if erreurs.type }}">
+            <label for="type">Type</label>
+            <select id="type" name="type" data-regle="requis" required>
+              {% for code, nom in TYPES_ENTRETIEN.items() %}<option value="{{ code }}"{% if form.type == code %} selected{% endif %}>{{ nom }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="champ{{ ' invalide' if erreurs.cout }}">
+            <label for="cout">Coût (FCFA)</label>
+            <input type="number" id="cout" name="cout" min="0" value="{{ form.cout }}" data-regle="entier" required>
+            {% if erreurs.cout %}<p class="erreur-champ">{{ erreurs.cout }}</p>{% endif %}
+          </div>
+          <div class="champ{{ ' invalide' if erreurs.kilometrage }}">
+            <label for="kilometrage">Kilométrage au moment de l'entretien</label>
+            <input type="number" id="kilometrage" name="kilometrage" min="0" value="{{ form.kilometrage }}" data-regle="entier" required>
+            {% if erreurs.kilometrage %}<p class="erreur-champ">{{ erreurs.kilometrage }}</p>{% endif %}
+          </div>
+        </div>
+        <button class="btn btn-principal" type="submit">Enregistrer</button>
+      </form>
+    </section>
+  </div>
+
+  <h2>Derniers entretiens</h2>
+  <div class="tableau-conteneur">
+    <table class="adaptatif">
+      <thead><tr><th>Date</th><th>Véhicule</th><th>Type</th><th>Kilométrage</th><th>Coût</th></tr></thead>
+      <tbody>
+      {% for e in entretiens %}
+      <tr><td data-label="Date">{{ e.date|date_fr }}</td><td data-label="Véhicule">{{ e.marque }} {{ e.modele }} · {{ e.immatriculation }}</td>
+          <td data-label="Type">{{ TYPES_ENTRETIEN[e.type] }}</td><td data-label="Kilométrage">{{ e.kilometrage }} km</td><td data-label="Coût">{{ e.cout|fcfa }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,311 @@
+BEGIN TRANSACTION;
+CREATE TABLE administrateurs (
+    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    login     TEXT NOT NULL UNIQUE,
+    empreinte TEXT NOT NULL
+);
+INSERT INTO "administrateurs" VALUES(1,'admin','scrypt:32768:8:1$RAGxmp2eKrKn6Dge$d256ee7ca92733584ef7d5092ec3824c9f010823b3d02ceeafd6a6e62e65784aabda1db9e94ee728ca7a47c5e85f7486580f0ea23ff99dd50b44143fc75e6e9c');
+CREATE TABLE categories (
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom                  TEXT    NOT NULL UNIQUE,
+    description          TEXT    NOT NULL DEFAULT '',
+    prix_jour            INTEGER NOT NULL CHECK (prix_jour > 0),
+    supplement_chauffeur INTEGER NOT NULL CHECK (supplement_chauffeur >= 0),
+    caution              INTEGER NOT NULL CHECK (caution >= 0)
+);
+INSERT INTO "categories" VALUES(1,'Berline économique','Compacte, sobre et facile à garer : idéale pour la ville.',25000,15000,100000);
+INSERT INTO "categories" VALUES(2,'Berline confort','Climatisation, grand coffre et sièges soignés pour les longs trajets.',40000,20000,150000);
+INSERT INTO "categories" VALUES(3,'4x4 / SUV','Tout-terrain robuste pour la route de Kribi comme pour les pistes.',65000,25000,300000);
+INSERT INTO "categories" VALUES(4,'Minibus','De 9 à 30 places pour mariages, excursions et missions d''entreprise.',90000,30000,250000);
+CREATE TABLE clients (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom        TEXT NOT NULL,
+    telephone  TEXT NOT NULL,
+    permis     TEXT NOT NULL UNIQUE
+);
+INSERT INTO "clients" VALUES(1,'Marie Mbarga','674108603','CM100000');
+INSERT INTO "clients" VALUES(2,'Moussa Njoya','659149732','CM100037');
+INSERT INTO "clients" VALUES(3,'Kevin Ndzana','650499914','CM100074');
+INSERT INTO "clients" VALUES(4,'Kevin Tchoupo','668478454','CM100111');
+INSERT INTO "clients" VALUES(5,'Aline Owona','669142600','CM100148');
+INSERT INTO "clients" VALUES(6,'Yannick Bello','689886237','CM100185');
+INSERT INTO "clients" VALUES(7,'Estelle Mbarga','667090293','CM100222');
+INSERT INTO "clients" VALUES(8,'Nadège Nkoulou','663612365','CM100259');
+INSERT INTO "clients" VALUES(9,'Nadège Atangana','656374122','CM100296');
+INSERT INTO "clients" VALUES(10,'Marie Essomba','674437923','CM100333');
+INSERT INTO "clients" VALUES(11,'Paul Abena','692094235','CM100370');
+INSERT INTO "clients" VALUES(12,'Clarisse Fotso','694918715','CM100407');
+INSERT INTO "clients" VALUES(13,'Hervé Tchoupo','650768805','CM100444');
+INSERT INTO "clients" VALUES(14,'Moussa Tamba','653905582','CM100481');
+INSERT INTO "clients" VALUES(15,'Marie Mvondo','677606962','CM100518');
+INSERT INTO "clients" VALUES(16,'Hervé Ekane','675960453','CM100555');
+INSERT INTO "clients" VALUES(17,'Rose Nkoulou','652871230','CM100592');
+INSERT INTO "clients" VALUES(18,'Landry Bello','667755439','CM100629');
+INSERT INTO "clients" VALUES(19,'Clarisse Nkoulou','693684531','CM100666');
+INSERT INTO "clients" VALUES(20,'Nadège Ngo Bassa','660538552','CM100703');
+INSERT INTO "clients" VALUES(21,'Nadège Mvondo','671110460','CM100740');
+INSERT INTO "clients" VALUES(22,'Rose Kamga','668375710','CM100777');
+INSERT INTO "clients" VALUES(23,'Clarisse Abena','664443951','CM100814');
+INSERT INTO "clients" VALUES(24,'Ibrahim Bello','699042538','CM100851');
+INSERT INTO "clients" VALUES(25,'Estelle Ndzana','696700828','CM100888');
+INSERT INTO "clients" VALUES(26,'Hervé Bello','668548432','CM100925');
+INSERT INTO "clients" VALUES(27,'Éric Fotso','651839607','CM100962');
+INSERT INTO "clients" VALUES(28,'Ibrahim Ekane','681065818','CM100999');
+INSERT INTO "clients" VALUES(29,'Clarisse Mvondo','697852574','CM101036');
+INSERT INTO "clients" VALUES(30,'Ornella Nkoulou','690192619','CM101073');
+INSERT INTO "clients" VALUES(31,'Marie Owona','675707197','CM101110');
+INSERT INTO "clients" VALUES(32,'Marie Tamba','682653446','CM101147');
+INSERT INTO "clients" VALUES(33,'Fatima Mbarga','678398441','CM101184');
+INSERT INTO "clients" VALUES(34,'Sandra Manga','655007072','CM101221');
+INSERT INTO "clients" VALUES(35,'Ornella Tchoupo','666273233','CM101258');
+INSERT INTO "clients" VALUES(36,'Sandra Owona','690009594','CM101295');
+INSERT INTO "clients" VALUES(37,'Nadège Tchinda','651876828','CM101332');
+INSERT INTO "clients" VALUES(38,'Hervé Tamba','660971823','CM101369');
+INSERT INTO "clients" VALUES(39,'Moussa Fotso','658153566','CM101406');
+INSERT INTO "clients" VALUES(40,'Kevin Owona','662154051','CM101443');
+INSERT INTO "clients" VALUES(41,'Éric Owona','664446912','CM101480');
+INSERT INTO "clients" VALUES(42,'Ornella Ndzana','669047886','CM101517');
+INSERT INTO "clients" VALUES(43,'Rose Tamba','686264956','CM101554');
+INSERT INTO "clients" VALUES(44,'Fatima Manga','682030113','CM101591');
+INSERT INTO "clients" VALUES(45,'Moussa Bello','655672134','CM101628');
+INSERT INTO "clients" VALUES(46,'Aline Owona','669872386','CM101665');
+INSERT INTO "clients" VALUES(47,'Moussa Mbarga','650987737','CM101702');
+INSERT INTO "clients" VALUES(48,'Moussa Fotso','655543670','CM101739');
+INSERT INTO "clients" VALUES(49,'Kevin Manga','664672073','CM101776');
+INSERT INTO "clients" VALUES(50,'Éric Tchoupo','692219824','CM101813');
+CREATE TABLE entretiens (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    vehicule_id  INTEGER NOT NULL REFERENCES vehicules(id),
+    date         TEXT    NOT NULL,
+    type         TEXT    NOT NULL CHECK (type IN ('vidange', 'pneus', 'revision')),
+    cout         INTEGER NOT NULL CHECK (cout >= 0),
+    kilometrage  INTEGER NOT NULL CHECK (kilometrage >= 0)
+);
+INSERT INTO "entretiens" VALUES(1,1,'2026-10-10','vidange',35000,88122);
+INSERT INTO "entretiens" VALUES(2,1,'2026-07-27','pneus',180000,75166);
+INSERT INTO "entretiens" VALUES(3,2,'2026-08-14','vidange',55000,36819);
+INSERT INTO "entretiens" VALUES(4,2,'2026-09-07','revision',180000,28782);
+INSERT INTO "entretiens" VALUES(5,3,'2026-09-29','vidange',45000,66665);
+INSERT INTO "entretiens" VALUES(6,3,'2026-08-31','revision',180000,55937);
+INSERT INTO "entretiens" VALUES(7,4,'2026-10-13','vidange',45000,92624);
+INSERT INTO "entretiens" VALUES(8,4,'2026-07-28','pneus',120000,74130);
+INSERT INTO "entretiens" VALUES(9,5,'2026-08-20','vidange',55000,84104);
+INSERT INTO "entretiens" VALUES(10,5,'2026-06-02','revision',60000,72258);
+INSERT INTO "entretiens" VALUES(11,6,'2026-06-11','vidange',35000,23236);
+INSERT INTO "entretiens" VALUES(12,6,'2026-08-25','pneus',90000,16876);
+INSERT INTO "entretiens" VALUES(13,7,'2026-09-11','vidange',35000,93435);
+INSERT INTO "entretiens" VALUES(14,7,'2026-08-06','revision',120000,79548);
+INSERT INTO "entretiens" VALUES(15,8,'2026-09-08','vidange',45000,57131);
+INSERT INTO "entretiens" VALUES(16,8,'2026-07-26','pneus',180000,40009);
+INSERT INTO "entretiens" VALUES(17,9,'2026-08-27','vidange',40000,81910);
+INSERT INTO "entretiens" VALUES(18,9,'2026-09-26','pneus',90000,71229);
+INSERT INTO "entretiens" VALUES(19,10,'2026-07-16','vidange',55000,66624);
+INSERT INTO "entretiens" VALUES(20,10,'2026-06-05','revision',60000,53014);
+INSERT INTO "entretiens" VALUES(21,11,'2026-09-05','vidange',45000,72233);
+INSERT INTO "entretiens" VALUES(22,11,'2026-08-16','pneus',120000,58215);
+INSERT INTO "entretiens" VALUES(23,12,'2026-09-24','vidange',55000,67653);
+INSERT INTO "entretiens" VALUES(24,12,'2026-07-08','revision',90000,51501);
+INSERT INTO "entretiens" VALUES(25,13,'2026-06-02','vidange',40000,20108);
+INSERT INTO "entretiens" VALUES(26,13,'2026-08-09','pneus',90000,10939);
+INSERT INTO "entretiens" VALUES(27,14,'2026-08-26','vidange',35000,35776);
+INSERT INTO "entretiens" VALUES(28,14,'2026-09-13','pneus',120000,20756);
+INSERT INTO "entretiens" VALUES(29,15,'2026-06-20','vidange',40000,27107);
+INSERT INTO "entretiens" VALUES(30,15,'2026-08-30','revision',90000,23601);
+INSERT INTO "entretiens" VALUES(31,16,'2026-06-10','vidange',40000,30865);
+INSERT INTO "entretiens" VALUES(32,16,'2026-06-08','pneus',90000,28940);
+INSERT INTO "entretiens" VALUES(33,17,'2026-08-14','vidange',40000,42263);
+INSERT INTO "entretiens" VALUES(34,17,'2026-06-02','revision',90000,28138);
+INSERT INTO "entretiens" VALUES(35,18,'2026-10-07','vidange',55000,92576);
+INSERT INTO "entretiens" VALUES(36,18,'2026-07-25','pneus',90000,80279);
+INSERT INTO "entretiens" VALUES(37,19,'2026-10-14','vidange',40000,87987);
+INSERT INTO "entretiens" VALUES(38,19,'2026-09-23','pneus',90000,73767);
+INSERT INTO "entretiens" VALUES(39,20,'2026-10-06','vidange',35000,36719);
+INSERT INTO "entretiens" VALUES(40,20,'2026-09-24','revision',60000,23938);
+INSERT INTO "entretiens" VALUES(41,14,'2026-03-15','vidange',40000,11547);
+INSERT INTO "entretiens" VALUES(42,6,'2025-10-17','vidange',40000,2013);
+INSERT INTO "entretiens" VALUES(43,5,'2025-11-17','vidange',40000,64736);
+INSERT INTO "entretiens" VALUES(44,20,'2025-10-19','vidange',40000,8594);
+INSERT INTO "entretiens" VALUES(45,12,'2026-01-05','vidange',40000,46336);
+INSERT INTO "entretiens" VALUES(46,15,'2026-02-18','vidange',40000,8104);
+INSERT INTO "entretiens" VALUES(47,7,'2025-12-25','vidange',40000,69535);
+INSERT INTO "entretiens" VALUES(48,8,'2026-03-03','vidange',40000,31756);
+INSERT INTO "entretiens" VALUES(49,17,'2026-02-06','vidange',40000,17539);
+INSERT INTO "entretiens" VALUES(50,16,'2026-04-04','vidange',40000,10657);
+CREATE TABLE locations (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    reference       TEXT    NOT NULL UNIQUE,           -- code de suivi difficile à deviner
+    vehicule_id     INTEGER NOT NULL REFERENCES vehicules(id),
+    client_id       INTEGER NOT NULL REFERENCES clients(id),
+    date_debut      TEXT    NOT NULL,                  -- format AAAA-MM-JJ
+    date_fin        TEXT    NOT NULL,                  -- jour de retour
+    avec_chauffeur  INTEGER NOT NULL DEFAULT 0 CHECK (avec_chauffeur IN (0, 1)),
+    km_depart       INTEGER CHECK (km_depart IS NULL OR km_depart >= 0),
+    km_retour       INTEGER,
+    montant         INTEGER NOT NULL CHECK (montant >= 0),
+    statut          TEXT    NOT NULL DEFAULT 'demandee'
+                    CHECK (statut IN ('demandee', 'confirmee', 'en_cours', 'terminee', 'annulee')),
+    date_demande    TEXT    NOT NULL,
+    CHECK (date_fin > date_debut),
+    CHECK (km_retour IS NULL OR (km_depart IS NOT NULL AND km_retour > km_depart))
+);
+INSERT INTO "locations" VALUES(1,'WTAC2HPR',1,26,'2026-09-25','2026-10-02',1,86953,88143,280000,'terminee','2026-09-23');
+INSERT INTO "locations" VALUES(2,'FAN73KYZ',1,36,'2026-10-04','2026-10-11',0,88143,88654,175000,'terminee','2026-09-22');
+INSERT INTO "locations" VALUES(3,'YEK8UTZB',1,38,'2026-10-16','2026-10-18',1,88654,88828,80000,'terminee','2026-10-07');
+INSERT INTO "locations" VALUES(4,'S5F8CFVX',1,16,'2026-10-19','2026-10-23',1,88828,NULL,160000,'en_cours','2026-10-11');
+INSERT INTO "locations" VALUES(5,'D6HVVPUS',1,17,'2026-10-26','2026-10-29',0,NULL,NULL,75000,'confirmee','2026-10-21');
+INSERT INTO "locations" VALUES(6,'XLJEWQ77',1,1,'2026-10-30','2026-11-01',0,NULL,NULL,50000,'demandee','2026-10-21');
+INSERT INTO "locations" VALUES(7,'WJR65CPJ',2,1,'2026-09-28','2026-10-02',0,38104,38700,100000,'terminee','2026-09-21');
+INSERT INTO "locations" VALUES(8,'2WJZTPAC',2,45,'2026-10-02','2026-10-06',0,38700,39496,100000,'terminee','2026-09-28');
+INSERT INTO "locations" VALUES(9,'T4UEEK63',2,3,'2026-10-11','2026-10-16',0,39496,40471,125000,'terminee','2026-10-04');
+INSERT INTO "locations" VALUES(10,'GHD26PVE',2,16,'2026-10-16','2026-10-21',0,40471,40941,125000,'terminee','2026-10-01');
+INSERT INTO "locations" VALUES(11,'F3FPF73P',2,43,'2026-10-23','2026-10-25',0,NULL,NULL,50000,'demandee','2026-10-08');
+INSERT INTO "locations" VALUES(12,'ZHFYNBRG',2,30,'2026-10-26','2026-10-31',1,NULL,NULL,200000,'confirmee','2026-10-19');
+INSERT INTO "locations" VALUES(13,'S3X8ZGP8',3,22,'2026-09-13','2026-09-17',1,65001,65577,160000,'terminee','2026-09-02');
+INSERT INTO "locations" VALUES(14,'L5ZKKPNK',3,9,'2026-09-19','2026-09-21',0,65577,65957,50000,'terminee','2026-09-14');
+INSERT INTO "locations" VALUES(15,'P8X6VKTA',3,19,'2026-09-24','2026-09-30',0,65957,66713,150000,'terminee','2026-09-19');
+INSERT INTO "locations" VALUES(16,'PUWQQGR6',3,48,'2026-10-01','2026-10-06',1,66713,67453,200000,'terminee','2026-09-27');
+INSERT INTO "locations" VALUES(17,'XKXVC8HK',3,13,'2026-10-11','2026-10-17',0,67453,67987,150000,'terminee','2026-10-07');
+INSERT INTO "locations" VALUES(18,'AHR5CPWG',3,45,'2026-10-20','2026-10-24',1,67987,NULL,160000,'en_cours','2026-10-12');
+INSERT INTO "locations" VALUES(19,'Q24J2RHQ',4,46,'2026-09-20','2026-09-23',0,NULL,NULL,75000,'annulee','2026-09-14');
+INSERT INTO "locations" VALUES(20,'HL6CENEG',4,27,'2026-09-23','2026-09-30',1,89799,91143,280000,'terminee','2026-09-15');
+INSERT INTO "locations" VALUES(21,'LQB4N28A',4,49,'2026-10-03','2026-10-04',0,91143,91234,25000,'terminee','2026-09-22');
+INSERT INTO "locations" VALUES(22,'NAM258PZ',4,35,'2026-10-07','2026-10-10',0,91234,91843,75000,'terminee','2026-09-23');
+INSERT INTO "locations" VALUES(23,'VHHPALXN',4,11,'2026-10-14','2026-10-20',0,91843,93139,150000,'terminee','2026-09-29');
+INSERT INTO "locations" VALUES(24,'QEVANUAW',4,9,'2026-10-25','2026-11-01',0,NULL,NULL,175000,'confirmee','2026-10-10');
+INSERT INTO "locations" VALUES(25,'Y2FVZD48',5,7,'2026-09-23','2026-09-28',0,85515,86230,125000,'terminee','2026-09-12');
+INSERT INTO "locations" VALUES(26,'AKX8NYCY',5,41,'2026-09-30','2026-10-07',1,86230,87399,280000,'terminee','2026-09-25');
+INSERT INTO "locations" VALUES(27,'D25VD93M',5,28,'2026-10-09','2026-10-11',0,87399,87545,50000,'terminee','2026-09-27');
+INSERT INTO "locations" VALUES(28,'MSL54D8W',5,30,'2026-10-13','2026-10-17',0,87545,87825,100000,'terminee','2026-09-30');
+INSERT INTO "locations" VALUES(29,'EFSWV72Q',5,47,'2026-10-17','2026-10-21',1,NULL,NULL,160000,'annulee','2026-10-06');
+INSERT INTO "locations" VALUES(30,'J54C6HQV',5,25,'2026-10-22','2026-10-26',1,NULL,NULL,160000,'confirmee','2026-10-15');
+INSERT INTO "locations" VALUES(31,'RSPZLYJJ',6,8,'2026-09-20','2026-09-23',0,28761,29139,120000,'terminee','2026-09-07');
+INSERT INTO "locations" VALUES(32,'GDT2FGRZ',6,49,'2026-09-25','2026-09-30',0,29139,29789,200000,'terminee','2026-09-15');
+INSERT INTO "locations" VALUES(33,'V94KMKYE',6,3,'2026-10-04','2026-10-05',0,29789,29910,40000,'terminee','2026-10-02');
+INSERT INTO "locations" VALUES(34,'TYE5R5UR',6,29,'2026-10-10','2026-10-17',0,29910,31177,280000,'terminee','2026-10-03');
+INSERT INTO "locations" VALUES(35,'FB8R4NCW',6,4,'2026-10-22','2026-10-30',0,NULL,NULL,320000,'confirmee','2026-10-18');
+INSERT INTO "locations" VALUES(36,'EUK9D2V3',6,15,'2026-11-01','2026-11-05',0,NULL,NULL,160000,'confirmee','2026-10-18');
+INSERT INTO "locations" VALUES(37,'3WX7PTW7',7,10,'2026-09-22','2026-09-30',1,93494,94846,480000,'terminee','2026-09-19');
+INSERT INTO "locations" VALUES(38,'B3V47QQK',7,26,'2026-10-02','2026-10-03',0,94846,94959,40000,'terminee','2026-09-26');
+INSERT INTO "locations" VALUES(39,'SRCBPLJC',7,44,'2026-10-08','2026-10-12',1,94959,95443,240000,'terminee','2026-09-23');
+INSERT INTO "locations" VALUES(40,'5UA24U2F',7,34,'2026-10-13','2026-10-15',1,95443,95867,120000,'terminee','2026-10-01');
+INSERT INTO "locations" VALUES(41,'QJ9P49RP',7,21,'2026-10-18','2026-10-23',1,95867,NULL,300000,'en_cours','2026-10-06');
+INSERT INTO "locations" VALUES(42,'DFPRXN2B',7,6,'2026-10-25','2026-10-30',0,NULL,NULL,200000,'confirmee','2026-10-18');
+INSERT INTO "locations" VALUES(43,'C97QD4RY',8,33,'2026-09-20','2026-09-27',0,58082,58502,280000,'terminee','2026-09-07');
+INSERT INTO "locations" VALUES(44,'J49HTN7S',8,9,'2026-10-02','2026-10-10',0,58502,59718,320000,'terminee','2026-09-17');
+INSERT INTO "locations" VALUES(45,'C25L3JAZ',8,38,'2026-10-14','2026-10-22',0,59718,NULL,320000,'en_cours','2026-10-03');
+INSERT INTO "locations" VALUES(46,'9RETMTTQ',8,21,'2026-10-22','2026-10-26',1,NULL,NULL,240000,'confirmee','2026-10-07');
+INSERT INTO "locations" VALUES(47,'GYUH2BZY',8,25,'2026-10-28','2026-11-05',0,NULL,NULL,320000,'confirmee','2026-10-20');
+INSERT INTO "locations" VALUES(48,'93WE8E8L',8,7,'2026-11-05','2026-11-09',0,NULL,NULL,160000,'confirmee','2026-10-21');
+INSERT INTO "locations" VALUES(49,'YDFKALBM',9,28,'2026-09-28','2026-10-06',1,82711,83503,480000,'terminee','2026-09-24');
+INSERT INTO "locations" VALUES(50,'HPXFFVNX',9,32,'2026-10-06','2026-10-14',0,83503,85255,320000,'terminee','2026-09-25');
+INSERT INTO "locations" VALUES(51,'EQJJA36X',9,11,'2026-10-19','2026-10-26',0,85255,NULL,280000,'en_cours','2026-10-16');
+INSERT INTO "locations" VALUES(52,'QMUWPJ5G',9,25,'2026-10-28','2026-11-04',0,NULL,NULL,280000,'confirmee','2026-10-13');
+INSERT INTO "locations" VALUES(53,'RHUU9K9X',9,18,'2026-11-07','2026-11-08',0,NULL,NULL,40000,'confirmee','2026-11-05');
+INSERT INTO "locations" VALUES(54,'UXZBVR6K',9,15,'2026-11-13','2026-11-18',0,NULL,NULL,200000,'demandee','2026-11-02');
+INSERT INTO "locations" VALUES(55,'3QC2HXXN',10,36,'2026-09-27','2026-10-01',0,71179,71559,160000,'terminee','2026-09-20');
+INSERT INTO "locations" VALUES(56,'CNJDMZJN',10,41,'2026-10-06','2026-10-08',0,71559,71837,80000,'terminee','2026-09-29');
+INSERT INTO "locations" VALUES(57,'DHA6T7HC',10,30,'2026-10-11','2026-10-12',0,71837,71920,40000,'terminee','2026-09-28');
+INSERT INTO "locations" VALUES(58,'KPE8KRD6',10,9,'2026-10-14','2026-10-20',0,71920,72478,240000,'terminee','2026-10-06');
+INSERT INTO "locations" VALUES(59,'QXZ8PZEP',10,7,'2026-10-24','2026-10-30',0,NULL,NULL,240000,'demandee','2026-10-09');
+INSERT INTO "locations" VALUES(60,'RP8BMQ85',10,7,'2026-10-31','2026-11-05',0,NULL,NULL,200000,'demandee','2026-10-19');
+INSERT INTO "locations" VALUES(61,'3D5EM3UA',11,17,'2026-09-22','2026-09-28',1,73147,73693,540000,'terminee','2026-09-20');
+INSERT INTO "locations" VALUES(62,'EPDCQMUQ',11,15,'2026-10-01','2026-10-03',0,73693,74117,130000,'terminee','2026-09-20');
+INSERT INTO "locations" VALUES(63,'B35SQ8BR',11,26,'2026-10-03','2026-10-04',0,74117,74209,65000,'terminee','2026-09-25');
+INSERT INTO "locations" VALUES(64,'XR7CCVCJ',11,41,'2026-10-08','2026-10-12',1,74209,74661,360000,'terminee','2026-09-27');
+INSERT INTO "locations" VALUES(65,'TL9SQVDY',11,42,'2026-10-16','2026-10-20',0,74661,75049,260000,'terminee','2026-10-04');
+INSERT INTO "locations" VALUES(66,'6T5P6P4N',11,47,'2026-10-24','2026-10-25',1,NULL,NULL,90000,'demandee','2026-10-21');
+INSERT INTO "locations" VALUES(67,'5MTDJHPT',12,50,'2026-09-21','2026-09-26',0,65966,66871,325000,'terminee','2026-09-06');
+INSERT INTO "locations" VALUES(68,'VXTVXYAJ',12,49,'2026-09-26','2026-09-28',0,66871,67039,130000,'terminee','2026-09-20');
+INSERT INTO "locations" VALUES(69,'7MFEXCZ9',12,6,'2026-10-03','2026-10-09',0,67039,68299,390000,'terminee','2026-09-20');
+INSERT INTO "locations" VALUES(70,'SNQFKL8V',12,4,'2026-10-13','2026-10-19',0,68299,69307,390000,'terminee','2026-10-09');
+INSERT INTO "locations" VALUES(71,'FVXJXRQJ',12,49,'2026-10-24','2026-10-25',0,NULL,NULL,65000,'confirmee','2026-10-14');
+INSERT INTO "locations" VALUES(72,'DPKXRXBN',12,39,'2026-10-27','2026-10-29',0,NULL,NULL,130000,'confirmee','2026-10-25');
+INSERT INTO "locations" VALUES(73,'N8F8QYMP',13,7,'2026-09-24','2026-09-28',0,26007,26543,260000,'terminee','2026-09-19');
+INSERT INTO "locations" VALUES(74,'PNC5ZH2C',13,41,'2026-09-30','2026-10-02',1,26543,26751,180000,'terminee','2026-09-27');
+INSERT INTO "locations" VALUES(75,'SG2M8WED',13,17,'2026-10-03','2026-10-10',0,26751,28172,455000,'terminee','2026-09-28');
+INSERT INTO "locations" VALUES(76,'FE2C8WQU',13,38,'2026-10-15','2026-10-21',1,28172,28592,540000,'terminee','2026-10-06');
+INSERT INTO "locations" VALUES(77,'X6W9L9LQ',13,31,'2026-10-24','2026-10-25',0,NULL,NULL,65000,'confirmee','2026-10-15');
+INSERT INTO "locations" VALUES(78,'W3UMCQBM',13,19,'2026-10-27','2026-11-03',0,NULL,NULL,455000,'demandee','2026-10-24');
+INSERT INTO "locations" VALUES(79,'XBWLLTNJ',14,43,'2026-09-20','2026-09-27',0,36835,37325,455000,'terminee','2026-09-09');
+INSERT INTO "locations" VALUES(80,'5LUEM8YN',14,39,'2026-09-30','2026-10-04',1,37325,37717,360000,'terminee','2026-09-17');
+INSERT INTO "locations" VALUES(81,'8KN34X4Z',14,44,'2026-10-04','2026-10-12',1,37717,38893,720000,'terminee','2026-09-24');
+INSERT INTO "locations" VALUES(82,'CXSAK8L2',14,13,'2026-10-17','2026-10-19',0,38893,39139,130000,'terminee','2026-10-12');
+INSERT INTO "locations" VALUES(83,'9EK3STZS',14,43,'2026-10-24','2026-11-01',0,NULL,NULL,520000,'confirmee','2026-10-17');
+INSERT INTO "locations" VALUES(84,'6VVEFYV6',14,47,'2026-11-05','2026-11-08',0,NULL,NULL,195000,'demandee','2026-10-27');
+INSERT INTO "locations" VALUES(85,'55K2J6EP',15,15,'2026-09-21','2026-09-25',0,30726,31422,260000,'terminee','2026-09-06');
+INSERT INTO "locations" VALUES(86,'QMABSH9M',15,2,'2026-09-26','2026-09-30',1,31422,32142,360000,'terminee','2026-09-19');
+INSERT INTO "locations" VALUES(87,'74W3EK4Y',15,9,'2026-10-01','2026-10-07',0,32142,33174,390000,'terminee','2026-09-17');
+INSERT INTO "locations" VALUES(88,'YQACJ4TZ',15,34,'2026-10-10','2026-10-15',0,33174,34009,325000,'terminee','2026-10-02');
+INSERT INTO "locations" VALUES(89,'DKKBP3QD',15,32,'2026-10-16','2026-10-20',0,34009,34505,260000,'terminee','2026-10-05');
+INSERT INTO "locations" VALUES(90,'TWUYKAMU',15,12,'2026-10-20','2026-10-28',0,34505,NULL,520000,'en_cours','2026-10-08');
+INSERT INTO "locations" VALUES(91,'FEY8BG36',16,21,'2026-09-19','2026-09-21',0,36221,36599,180000,'terminee','2026-09-13');
+INSERT INTO "locations" VALUES(92,'S9TJ2GM2',16,42,'2026-09-25','2026-09-26',0,36599,36758,90000,'terminee','2026-09-18');
+INSERT INTO "locations" VALUES(93,'J3PNQ8LF',16,45,'2026-09-28','2026-10-03',0,36758,37143,450000,'terminee','2026-09-19');
+INSERT INTO "locations" VALUES(94,'M3JCPP9F',16,19,'2026-10-05','2026-10-09',0,37143,37975,360000,'terminee','2026-09-28');
+INSERT INTO "locations" VALUES(95,'DLKQYFQQ',16,47,'2026-10-14','2026-10-20',1,37975,38851,720000,'terminee','2026-09-29');
+INSERT INTO "locations" VALUES(96,'7VPW3BXN',16,33,'2026-10-25','2026-10-28',0,NULL,NULL,270000,'confirmee','2026-10-11');
+INSERT INTO "locations" VALUES(97,'D2YGVY9G',17,9,'2026-09-26','2026-10-04',1,NULL,NULL,960000,'annulee','2026-09-11');
+INSERT INTO "locations" VALUES(98,'CFY9389X',17,46,'2026-10-09','2026-10-15',0,45969,46377,540000,'terminee','2026-10-06');
+INSERT INTO "locations" VALUES(99,'TKKFYYFM',17,15,'2026-10-19','2026-10-22',0,46377,NULL,270000,'en_cours','2026-10-16');
+INSERT INTO "locations" VALUES(100,'93HRMUQ9',17,9,'2026-10-24','2026-10-30',0,NULL,NULL,540000,'confirmee','2026-10-13');
+INSERT INTO "locations" VALUES(101,'6CNYRPPU',17,9,'2026-10-31','2026-11-06',0,NULL,NULL,540000,'confirmee','2026-10-24');
+INSERT INTO "locations" VALUES(102,'WQXM62WF',17,9,'2026-11-07','2026-11-09',1,NULL,NULL,240000,'confirmee','2026-10-30');
+INSERT INTO "locations" VALUES(103,'JGUVA6TW',18,20,'2026-09-11','2026-09-13',0,90911,91113,180000,'terminee','2026-09-02');
+INSERT INTO "locations" VALUES(104,'H3NQYFPQ',18,22,'2026-09-15','2026-09-19',1,91113,91641,480000,'terminee','2026-09-04');
+INSERT INTO "locations" VALUES(105,'E5L9MN2S',18,7,'2026-09-19','2026-09-24',1,91641,92291,600000,'terminee','2026-09-12');
+INSERT INTO "locations" VALUES(106,'HDQEB85P',18,11,'2026-09-25','2026-09-30',0,92291,92806,450000,'terminee','2026-09-10');
+INSERT INTO "locations" VALUES(107,'LUL2RSRK',18,2,'2026-10-04','2026-10-07',1,92806,93448,360000,'terminee','2026-10-01');
+INSERT INTO "locations" VALUES(108,'8S8GMBR6',18,42,'2026-10-09','2026-10-10',0,NULL,NULL,90000,'annulee','2026-09-27');
+INSERT INTO "locations" VALUES(109,'SSBELRQV',19,33,'2026-09-25','2026-09-26',0,86680,86807,90000,'terminee','2026-09-21');
+INSERT INTO "locations" VALUES(110,'LVF9ZKL4',19,35,'2026-10-01','2026-10-07',0,86807,87779,540000,'terminee','2026-09-22');
+INSERT INTO "locations" VALUES(111,'YK4MX9U3',19,47,'2026-10-07','2026-10-11',0,87779,88411,360000,'terminee','2026-09-22');
+INSERT INTO "locations" VALUES(112,'YAR832UZ',19,38,'2026-10-15','2026-10-23',0,88411,NULL,720000,'en_cours','2026-10-06');
+INSERT INTO "locations" VALUES(113,'FWV4EXB8',19,8,'2026-10-25','2026-10-27',1,NULL,NULL,240000,'confirmee','2026-10-20');
+INSERT INTO "locations" VALUES(114,'ALEYP275',19,48,'2026-10-29','2026-11-04',0,NULL,NULL,540000,'confirmee','2026-10-16');
+INSERT INTO "locations" VALUES(115,'73JDXN94',20,50,'2026-09-15','2026-09-19',0,33163,33891,360000,'terminee','2026-09-01');
+INSERT INTO "locations" VALUES(116,'EB8C7WZG',20,35,'2026-09-23','2026-09-30',1,33891,35263,840000,'terminee','2026-09-17');
+INSERT INTO "locations" VALUES(117,'7YEVUHXS',20,41,'2026-10-02','2026-10-08',0,35263,36025,540000,'terminee','2026-09-27');
+INSERT INTO "locations" VALUES(118,'BPYD2AT7',20,27,'2026-10-12','2026-10-20',1,36025,37641,960000,'terminee','2026-09-30');
+INSERT INTO "locations" VALUES(119,'76RG8LW7',20,6,'2026-10-22','2026-10-26',0,NULL,NULL,360000,'demandee','2026-10-10');
+INSERT INTO "locations" VALUES(120,'UTZ77F6F',20,3,'2026-10-28','2026-11-01',0,NULL,NULL,360000,'confirmee','2026-10-13');
+CREATE TABLE vehicules (
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    immatriculation  TEXT    NOT NULL UNIQUE,
+    marque           TEXT    NOT NULL,
+    modele           TEXT    NOT NULL,
+    categorie_id     INTEGER NOT NULL REFERENCES categories(id),
+    places           INTEGER NOT NULL CHECK (places BETWEEN 1 AND 60),
+    boite            TEXT    NOT NULL CHECK (boite IN ('manuelle', 'automatique')),
+    kilometrage      INTEGER NOT NULL CHECK (kilometrage >= 0),
+    photo            TEXT    NOT NULL DEFAULT 'berline_1.jpg',
+    disponible       INTEGER NOT NULL DEFAULT 1 CHECK (disponible IN (0, 1))  -- 0 = hors service
+);
+INSERT INTO "vehicules" VALUES(1,'LT-100-JP','Toyota','Yaris',1,5,'manuelle',88828,'berline_1.jpg',1);
+INSERT INTO "vehicules" VALUES(2,'LT-107-FR','Hyundai','Accent',1,5,'manuelle',40941,'berline_2.jpg',1);
+INSERT INTO "vehicules" VALUES(3,'LT-114-MU','Kia','Rio',1,5,'manuelle',67987,'berline_3.jpg',1);
+INSERT INTO "vehicules" VALUES(4,'LT-121-CZ','Suzuki','Dzire',1,5,'manuelle',93139,'berline_4.jpg',1);
+INSERT INTO "vehicules" VALUES(5,'LT-128-KR','Nissan','Sunny',1,5,'manuelle',87825,'berline_5.jpg',1);
+INSERT INTO "vehicules" VALUES(6,'LT-135-LX','Toyota','Camry',2,5,'automatique',31177,'bercon_1.jpg',1);
+INSERT INTO "vehicules" VALUES(7,'LT-142-LR','Hyundai','Sonata',2,5,'automatique',95867,'bercon_2.jpg',1);
+INSERT INTO "vehicules" VALUES(8,'LT-149-AW','Honda','Accord',2,5,'automatique',59718,'bercon_3.jpg',1);
+INSERT INTO "vehicules" VALUES(9,'LT-156-GP','Kia','Optima',2,5,'automatique',85255,'bercon_4.jpg',1);
+INSERT INTO "vehicules" VALUES(10,'LT-163-EZ','Toyota','Avensis',2,5,'manuelle',72478,'bercon_5.jpg',1);
+INSERT INTO "vehicules" VALUES(11,'LT-170-CW','Toyota','Land Cruiser Prado',3,7,'automatique',75049,'suv_1.jpg',1);
+INSERT INTO "vehicules" VALUES(12,'LT-177-LV','Toyota','Hilux',3,5,'manuelle',69307,'suv_2.jpg',1);
+INSERT INTO "vehicules" VALUES(13,'LT-184-GS','Mitsubishi','Pajero',3,7,'automatique',28592,'suv_3.jpg',1);
+INSERT INTO "vehicules" VALUES(14,'LT-191-GU','Nissan','Patrol',3,7,'automatique',39139,'suv_4.jpg',1);
+INSERT INTO "vehicules" VALUES(15,'LT-198-JP','Toyota','RAV4',3,5,'automatique',34505,'suv_5.jpg',1);
+INSERT INTO "vehicules" VALUES(16,'LT-205-MV','Toyota','Hiace',4,15,'manuelle',38851,'mini_1.jpg',1);
+INSERT INTO "vehicules" VALUES(17,'LT-212-JU','Hyundai','H1',4,9,'manuelle',46377,'mini_2.jpg',1);
+INSERT INTO "vehicules" VALUES(18,'LT-219-AY','Toyota','Coaster',4,30,'manuelle',93448,'mini_3.jpg',1);
+INSERT INTO "vehicules" VALUES(19,'LT-226-CR','Mercedes','Sprinter',4,18,'manuelle',88411,'mini_4.jpg',1);
+INSERT INTO "vehicules" VALUES(20,'LT-233-HT','Nissan','Urvan',4,14,'manuelle',37641,'mini_5.jpg',0);
+CREATE INDEX idx_locations_vehicule ON locations (vehicule_id, date_debut, date_fin);
+DELETE FROM "sqlite_sequence";
+INSERT INTO "sqlite_sequence" VALUES('categories',4);
+INSERT INTO "sqlite_sequence" VALUES('clients',50);
+INSERT INTO "sqlite_sequence" VALUES('vehicules',20);
+INSERT INTO "sqlite_sequence" VALUES('locations',120);
+INSERT INTO "sqlite_sequence" VALUES('entretiens',50);
+INSERT INTO "sqlite_sequence" VALUES('administrateurs',1);
+COMMIT;

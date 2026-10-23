@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block titre %}{{ v.marque }} {{ v.modele }}{% endblock %}
+{% block contenu %}
+<div class="conteneur fiche">
+  <section aria-labelledby="t-vehicule">
+    <p><a href="{{ url_for('catalogue') }}">← Retour au catalogue</a></p>
+    <h1 id="t-vehicule">{{ v.marque }} {{ v.modele }}</h1>
+    <p><span class="plaque"><span>{{ v.immatriculation }}</span></span> <span class="etiquette">{{ v.categorie }}</span></p>
+    <div class="fiche-visuel">
+      <img src="{{ url_for('static', filename='images/' ~ v.photo) }}" alt="{{ v.marque }} {{ v.modele }}" width="400" height="200">
+    </div>
+    <ul class="specs">
+      <li><b>Places</b>{{ v.places }}</li>
+      <li><b>Boîte</b>{{ v.boite|capitalize }}</li>
+      <li><b>Kilométrage</b>{{ '{:,}'.format(v.kilometrage).replace(',', ' ') }} km</li>
+      <li><b>Caution</b>{{ v.caution|fcfa }}</li>
+      <li><b>Tarif</b>{{ v.prix_jour|fcfa }} / jour</li>
+      <li><b>Avec chauffeur</b>+{{ v.supplement_chauffeur|fcfa }} / jour</li>
+    </ul>
+  </section>
+
+  <section class="panneau collant" aria-labelledby="t-resa">
+    <h2 id="t-resa">Demander une réservation</h2>
+    {% if erreurs.general %}<div class="message erreur">{{ erreurs.general }}</div>{% endif %}
+    <form id="form-reservation" method="post" action="{{ url_for('fiche_vehicule', vid=v.id) }}" novalidate
+          data-valider data-vehicule="{{ v.id }}" data-aujourdhui="{{ aujourdhui }}">
+      <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+      <div class="grille-form">
+        <div class="champ{{ ' invalide' if erreurs.dates }}">
+          <label for="debut">Départ</label>
+          <input type="date" id="debut" name="debut" min="{{ aujourdhui }}" value="{{ form.debut }}" data-regle="date-debut" required>
+        </div>
+        <div class="champ{{ ' invalide' if erreurs.dates }}">
+          <label for="fin">Retour</label>
+          <input type="date" id="fin" name="fin" min="{{ aujourdhui }}" value="{{ form.fin }}" data-regle="date-fin" required>
+          {% if erreurs.dates %}<p class="erreur-champ" role="alert">{{ erreurs.dates }}</p>{% endif %}
+        </div>
+      </div>
+      <div class="champ case">
+        <input type="checkbox" id="chauffeur" name="chauffeur"{% if form.chauffeur %} checked{% endif %}>
+        <label for="chauffeur">Avec chauffeur (+{{ v.supplement_chauffeur|fcfa }} / jour)</label>
+      </div>
+      <div class="resume" id="resume" aria-live="polite">Choisissez vos dates pour voir le montant.</div>
+      <div class="champ{{ ' invalide' if erreurs.nom }}">
+        <label for="nom">Nom complet</label>
+        <input type="text" id="nom" name="nom" value="{{ form.nom }}" maxlength="80" autocomplete="name" data-regle="nom" required>
+        {% if erreurs.nom %}<p class="erreur-champ" role="alert">{{ erreurs.nom }}</p>{% endif %}
+      </div>
+      <div class="champ{{ ' invalide' if erreurs.telephone }}">
+        <label for="telephone">Téléphone</label>
+        <input type="tel" id="telephone" name="telephone" value="{{ form.telephone }}" placeholder="677 12 34 56" autocomplete="tel" data-regle="tel" required>
+        {% if erreurs.telephone %}<p class="erreur-champ" role="alert">{{ erreurs.telephone }}</p>{% endif %}
+      </div>
+      <div class="champ{{ ' invalide' if erreurs.permis }}">
+        <label for="permis">Numéro de permis de conduire</label>
+        <input type="text" id="permis" name="permis" value="{{ form.permis }}" maxlength="30" data-regle="permis" required>
+        {% if erreurs.permis %}<p class="erreur-champ" role="alert">{{ erreurs.permis }}</p>{% endif %}
+      </div>
+      <button class="btn btn-principal btn-bloc" type="submit"{% if not v.disponible %} disabled{% endif %}>Envoyer ma demande</button>
+      <p class="discret" style="margin-top:.8rem">Le paiement se fait à l'agence. Le montant définitif est recalculé par le serveur.</p>
+    </form>
+  </section>
+</div>
+{% endblock %}

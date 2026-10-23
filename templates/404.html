@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block titre %}Page introuvable{% endblock %}
+{% block contenu %}
+<div class="conteneur page-erreur">
+  <p class="gros">4<span>0</span>4</p>
+  <h1>Cette route ne mène nulle part</h1>
+  <p>La page demandée n'existe pas ou a été déplacée. Reprenez la route depuis l'accueil.</p>
+  <a class="btn btn-principal" href="{{ url_for('accueil') }}">Retour à l'accueil</a>
+  <a class="btn btn-contour" href="{{ url_for('catalogue') }}">Voir les véhicules</a>
+</div>
+{% endblock %}

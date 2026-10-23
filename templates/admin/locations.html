@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block titre %}Locations{% endblock %}
+{% block contenu %}
+<div class="conteneur titre-page">
+  <h1>Locations <span class="discret">({{ total }})</span></h1>
+  <nav class="filtres-statut" aria-label="Filtrer par statut">
+    <a href="{{ url_for('admin_locations') }}"{% if not statut %} aria-current="true"{% endif %}>Toutes</a>
+    {% for code, nom in STATUTS.items() %}
+    <a href="{{ url_for('admin_locations', statut=code) }}"{% if statut == code %} aria-current="true"{% endif %}>{{ nom }}</a>
+    {% endfor %}
+  </nav>
+  <div class="tableau-conteneur">
+    <table class="adaptatif">
+      <thead><tr><th>Client</th><th>Véhicule</th><th>Période</th><th>Montant</th><th>Statut</th><th>Km</th><th>Actions</th></tr></thead>
+      <tbody>
+      {% for l in locations %}
+      <tr>
+        <td data-label="Client">{{ l.client }}<br><span class="discret">{{ l.telephone }}</span></td>
+        <td data-label="Véhicule">{{ l.marque }} {{ l.modele }}<br><span class="plaque"><span>{{ l.immatriculation }}</span></span></td>
+        <td data-label="Période">{{ l.date_debut|date_fr }} → {{ l.date_fin|date_fr }}<br><span class="discret">{{ l.jours }} j{{ ' · chauffeur' if l.avec_chauffeur }}</span></td>
+        <td data-label="Montant">{{ l.montant|fcfa }}</td>
+        <td data-label="Statut"><span class="pastille {{ l.statut }}">{{ l.statut|statut }}</span></td>
+        <td data-label="Km">{% if l.km_depart is not none %}{{ l.km_depart }}{% if l.km_retour is not none %} → {{ l.km_retour }}{% endif %}{% else %}–{% endif %}</td>
+        <td class="actions-cellule">
+          <div class="actions">
+          {% if l.statut == 'demandee' %}
+            <form method="post" action="{{ url_for('valider_location', lid=l.id) }}"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="btn btn-secondaire btn-petit" type="submit">Valider</button></form>
+          {% elif l.statut == 'confirmee' %}
+            <form method="post" action="{{ url_for('depart_location', lid=l.id) }}" data-valider novalidate>
+              <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+              <div class="champ" style="margin:0"><label class="sr-seulement" for="kd{{ l.id }}">Kilométrage de départ</label>
+              <input type="number" id="kd{{ l.id }}" name="km_depart" min="{{ km[l.vehicule_id] }}" value="{{ km[l.vehicule_id] }}" data-regle="entier" required></div>
+              <button class="btn btn-principal btn-petit" type="submit">Départ</button>
+            </form>
+          {% elif l.statut == 'en_cours' %}
+            <form method="post" action="{{ url_for('retour_location', lid=l.id) }}" data-valider novalidate>
+              <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+              <div class="champ" style="margin:0"><label class="sr-seulement" for="kr{{ l.id }}">Kilométrage de retour</label>
+              <input type="number" id="kr{{ l.id }}" name="km_retour" min="{{ l.km_depart + 1 }}" placeholder="&gt; {{ l.km_depart }}" data-regle="entier" required></div>
+              <button class="btn btn-principal btn-petit" type="submit">Retour</button>
+            </form>
+          {% endif %}
+          {% if l.statut in ('demandee', 'confirmee') %}
+            <form method="post" action="{{ url_for('annuler_location', lid=l.id) }}" data-confirm="Annuler cette réservation ?"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="btn btn-danger btn-petit" type="submit">Annuler</button></form>
+          {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">Aucune location pour ce filtre.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if pages > 1 %}
+  <nav class="pagination" aria-label="Pages">
+    {% if page > 1 %}<a class="btn btn-contour btn-petit" href="{{ url_for('admin_locations', statut=statut or none, page=page-1) }}">Précédent</a>{% endif %}
+    <span>Page {{ page }} sur {{ pages }}</span>
+    {% if page < pages %}<a class="btn btn-contour btn-petit" href="{{ url_for('admin_locations', statut=statut or none, page=page+1) }}">Suivant</a>{% endif %}
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

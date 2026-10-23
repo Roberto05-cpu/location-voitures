@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "_macros.html" import carte_vehicule %}
+{% block contenu %}
+<section class="hero" aria-labelledby="titre-hero">
+  <div class="conteneur hero-grille">
+    <div>
+      <h1 id="titre-hero">Le bon véhicule, au bon moment.</h1>
+      <p>Berlines, 4x4 et minibus à Douala, avec ou sans chauffeur. Choisissez vos dates : nous vous montrons seulement ce qui est libre.</p>
+      <form class="recherche" action="{{ url_for('catalogue') }}" method="get">
+        <div class="champ">
+          <label for="h-debut">Départ</label>
+          <input type="date" id="h-debut" name="debut" min="{{ aujourdhui }}" required>
+        </div>
+        <div class="champ">
+          <label for="h-fin">Retour</label>
+          <input type="date" id="h-fin" name="fin" min="{{ aujourdhui }}" required>
+        </div>
+        <button class="btn btn-principal" type="submit">Voir les véhicules libres</button>
+      </form>
+    </div>
+    <div class="hero-image">
+      <img src="{{ url_for('static', filename='images/suv_1.jpg') }}" alt="4x4 de la flotte" width="400" height="200">
+    </div>
+  </div>
+  <div class="ligne-route" aria-hidden="true"></div>
+</section>
+
+<section class="section conteneur" aria-labelledby="t-cat">
+  <h2 id="t-cat">Nos catégories</h2>
+  <div class="grille-cartes quatre">
+    {% for c in categories %}
+    <article class="categorie">
+      <h3>{{ c.nom }}</h3>
+      <p>{{ c.description }}</p>
+      <p class="prix">{{ c.prix_jour|fcfa }} <small class="discret">/ jour</small></p>
+      <p class="discret">Chauffeur : +{{ c.supplement_chauffeur|fcfa }} / jour<br>{{ c.nb }} véhicule{{ 's' if c.nb > 1 }} en service</p>
+      <a href="{{ url_for('catalogue', categorie=c.id) }}">Voir cette catégorie</a>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section conteneur" aria-labelledby="t-vedettes">
+  <h2 id="t-vedettes">À la une</h2>
+  <div class="grille-cartes quatre">
+    {% for v in vedettes %}{{ carte_vehicule(v) }}{% endfor %}
+  </div>
+</section>
+
+<section class="section conteneur" aria-labelledby="t-etapes">
+  <h2 id="t-etapes">Réserver en trois étapes</h2>
+  <div class="etapes">
+    <div class="etape"><div><h3>Choisissez vos dates</h3><p>Le catalogue ne propose que les véhicules réellement libres.</p></div></div>
+    <div class="etape"><div><h3>Envoyez votre demande</h3><p>Nom, téléphone et permis suffisent. Le montant est calculé pour vous.</p></div></div>
+    <div class="etape"><div><h3>Récupérez les clés</h3><p>L'agence confirme votre demande, puis enregistre le départ du véhicule.</p></div></div>
+  </div>
+</section>
+
+<section class="bandeau" aria-label="Chiffres clés">
+  <div class="conteneur chiffres">
+    <div><strong>{{ chiffres.vehicules }}</strong>véhicules en service</div>
+    <div><strong>{{ chiffres.clients }}</strong>clients</div>
+    <div><strong>{{ chiffres.locations }}</strong>locations terminées</div>
+  </div>
+</section>
+{% endblock %}

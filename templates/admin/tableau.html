@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block titre %}Tableau de bord{% endblock %}
+{% block contenu %}
+<div class="conteneur titre-page">
+  <h1>Tableau de bord</h1>
+  <div class="kpis">
+    <div class="kpi{{ ' alerte' if chiffres.demandes }}"><strong>{{ chiffres.demandes }}</strong>demandes à traiter</div>
+    <div class="kpi"><strong>{{ chiffres.en_cours }}</strong>locations en cours</div>
+    <div class="kpi"><strong>{{ chiffres.vehicules }}</strong>véhicules en service</div>
+    <div class="kpi{{ ' alerte' if alertes }}"><strong>{{ alertes|length }}</strong>vidanges à prévoir</div>
+  </div>
+
+  <div class="deux-colonnes">
+    <section class="panneau" aria-labelledby="t-demandes">
+      <h2 id="t-demandes">Demandes à valider</h2>
+      {% for l in demandes %}
+      <div class="alerte-ligne">
+        <div><strong>{{ l.marque }} {{ l.modele }}</strong><br>
+          <span class="discret">{{ l.client }} · {{ l.date_debut|date_fr }} → {{ l.date_fin|date_fr }}</span></div>
+        <div class="actions">
+          <form method="post" action="{{ url_for('valider_location', lid=l.id) }}"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="btn btn-secondaire btn-petit" type="submit">Valider</button></form>
+          <form method="post" action="{{ url_for('annuler_location', lid=l.id) }}" data-confirm="Refuser cette demande ?"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="btn btn-danger btn-petit" type="submit">Refuser</button></form>
+        </div>
+      </div>
+      {% else %}<p class="discret">Aucune demande en attente.</p>{% endfor %}
+      <p><a href="{{ url_for('admin_locations', statut='demandee') }}">Toutes les demandes</a></p>
+    </section>
+
+    <section class="panneau" aria-labelledby="t-alertes">
+      <h2 id="t-alertes">Alertes de vidange (plus de {{ '{:,}'.format(5000).replace(',', ' ') }} km)</h2>
+      {% for a in alertes %}
+      <div class="alerte-ligne">
+        <div><strong>{{ a.marque }} {{ a.modele }}</strong> <span class="plaque"><span>{{ a.immatriculation }}</span></span></div>
+        <span class="badge-alerte">{{ '{:,}'.format(a.depuis).replace(',', ' ') }} km depuis la vidange</span>
+      </div>
+      {% else %}<p class="discret">Aucun véhicule n'a dépassé le seuil.</p>{% endfor %}
+      <p><a href="{{ url_for('admin_entretiens') }}">Enregistrer un entretien</a></p>
+    </section>
+  </div>
+
+  <div class="deux-colonnes">
+    <section class="panneau" aria-labelledby="t-departs">
+      <h2 id="t-departs">Départs à enregistrer</h2>
+      {% for l in departs %}
+      <div class="alerte-ligne"><span>{{ l.marque }} {{ l.modele }} · {{ l.client }}</span><span class="discret">depuis le {{ l.date_debut|date_fr }}</span></div>
+      {% else %}<p class="discret">Aucun départ en attente.</p>{% endfor %}
+      <p><a href="{{ url_for('admin_locations', statut='confirmee') }}">Réservations confirmées</a></p>
+    </section>
+    <section class="panneau" aria-labelledby="t-retours">
+      <h2 id="t-retours">Retours attendus</h2>
+      {% for l in retours %}
+      <div class="alerte-ligne"><span>{{ l.marque }} {{ l.modele }} · {{ l.client }}</span><span class="badge-alerte">prévu le {{ l.date_fin|date_fr }}</span></div>
+      {% else %}<p class="discret">Aucun retour en retard ou prévu aujourd'hui.</p>{% endfor %}
+      <p><a href="{{ url_for('admin_locations', statut='en_cours') }}">Locations en cours</a></p>
+    </section>
+  </div>
+</div>
+{% endblock %}

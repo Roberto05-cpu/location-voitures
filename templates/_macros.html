@@ -1,0 +1,32 @@
+{# Macros réutilisées par plusieurs pages #}
+{% macro carte_vehicule(v, debut=none, fin=none) %}
+<article class="carte-vehicule">
+  <div class="visuel">
+    <img src="{{ url_for('static', filename='images/' ~ v.photo) }}" alt="{{ v.marque }} {{ v.modele }}" width="400" height="200" loading="lazy">
+  </div>
+  <div class="corps">
+    <h3>{{ v.marque }} {{ v.modele }}</h3>
+    <div><span class="plaque"><span>{{ v.immatriculation }}</span></span></div>
+    <div class="etiquettes">
+      <span class="etiquette">{{ v.categorie }}</span>
+      <span class="etiquette">{{ v.places }} places</span>
+      <span class="etiquette">{{ v.boite }}</span>
+    </div>
+    <p class="prix">{{ v.prix_jour|fcfa }} <small>/ jour</small></p>
+    <a class="btn btn-secondaire" href="{{ url_for('fiche_vehicule', vid=v.id, debut=debut or none, fin=fin or none) }}">Voir et réserver</a>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro resume_location(loc) %}
+<dl>
+  <dt>Statut</dt><dd><span class="pastille {{ loc.statut }}">{{ loc.statut|statut }}</span></dd>
+  <dt>Véhicule</dt><dd>{{ loc.marque }} {{ loc.modele }} <span class="plaque"><span>{{ loc.immatriculation }}</span></span></dd>
+  <dt>Client</dt><dd>{{ loc.client }}</dd>
+  <dt>Départ</dt><dd>{{ loc.date_debut|date_fr }}</dd>
+  <dt>Retour</dt><dd>{{ loc.date_fin|date_fr }} ({{ loc.jours }} {{ 'jours' if loc.jours > 1 else 'jour' }})</dd>
+  <dt>Chauffeur</dt><dd>{{ 'Oui' if loc.avec_chauffeur else 'Non' }}</dd>
+  <dt>Montant</dt><dd>{{ loc.montant|fcfa }}</dd>
+  <dt>Caution</dt><dd>{{ loc.caution|fcfa }} (remboursable au retour)</dd>
+</dl>
+{% endmacro %}

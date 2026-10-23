@@ -1,0 +1,1006 @@
+/* style.css : démarche mobile d'abord. Points de rupture : 640px et 960px.
+   Identité : bleu lagune, jaune soleil, ligne de route pointillée et plaques d'immatriculation. */
+:root {
+  --lagune: #0d3b66;
+  --lagune-2: #15508a;
+  --soleil: #f4d35e;
+  --soleil-fonce: #e3b93a;
+  --palmier: #1b7a52;
+  --brique: #b8332b;
+  --fond: #f2f5f8;
+  --carte: #fff;
+  --texte: #172033;
+  --gris: #5b6678;
+  --bordure: #dde3ec;
+  --rayon: 14px;
+  --police-titre: "Trebuchet MS", "Segoe UI", Tahoma, sans-serif;
+  --police: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  font-family: var(--police);
+  color: var(--texte);
+  background: var(--fond);
+  line-height: 1.55;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex: 1;
+}
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+a {
+  color: var(--lagune-2);
+}
+h1,
+h2,
+h3 {
+  font-family: var(--police-titre);
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+  color: var(--lagune);
+  letter-spacing: -0.01em;
+}
+h1 {
+  font-size: 2rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.1rem;
+}
+p {
+  margin: 0 0 1em;
+}
+:focus-visible {
+  outline: 3px solid var(--soleil-fonce);
+  outline-offset: 2px;
+}
+.conteneur {
+  width: min(1120px, 100% - 2rem);
+  margin-inline: auto;
+}
+.lien-evitement {
+  position: absolute;
+  left: -999px;
+  background: var(--soleil);
+  padding: 0.5rem 1rem;
+  z-index: 99;
+}
+.lien-evitement:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+}
+.discret {
+  color: var(--gris);
+  font-size: 0.92rem;
+}
+
+/* ---------- en-tête ---------- */
+.entete {
+  background: var(--lagune);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.entete .conteneur {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 62px;
+}
+.marque {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--police-titre);
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+.marque span {
+  color: var(--soleil);
+}
+.burger {
+  background: none;
+  border: 1px solid #ffffff55;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.45rem 0.8rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background: var(--lagune-2);
+  padding: 0.5rem 1rem 1rem;
+}
+.menu.ouvert {
+  display: block;
+}
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.menu a,
+.menu button.lien {
+  display: block;
+  padding: 0.7rem 0.2rem;
+  color: #fff;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.menu a[aria-current="page"] {
+  color: var(--soleil);
+}
+.menu a:hover,
+.menu button.lien:hover {
+  color: var(--soleil);
+}
+.menu form {
+  margin: 0;
+}
+.barre-admin {
+  background: #fff;
+  border-bottom: 1px solid var(--bordure);
+}
+.barre-admin .conteneur {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  padding-block: 0.4rem;
+}
+.barre-admin a {
+  white-space: nowrap;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--gris);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.barre-admin a[aria-current="page"] {
+  background: var(--lagune);
+  color: #fff;
+}
+
+/* ---------- boutons et formulaires ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0.7rem 1.3rem;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.btn-principal {
+  background: var(--soleil);
+  color: #2a2200;
+}
+.btn-principal:hover {
+  background: var(--soleil-fonce);
+}
+.btn-secondaire {
+  background: var(--lagune);
+  color: #fff;
+}
+.btn-secondaire:hover {
+  background: var(--lagune-2);
+}
+.btn-contour {
+  background: transparent;
+  border-color: var(--lagune);
+  color: var(--lagune);
+}
+.btn-contour:hover {
+  background: var(--lagune);
+  color: #fff;
+}
+.btn-danger {
+  background: #fff;
+  border-color: var(--brique);
+  color: var(--brique);
+}
+.btn-danger:hover {
+  background: var(--brique);
+  color: #fff;
+}
+.btn-petit {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+}
+.btn-bloc {
+  width: 100%;
+}
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1.5px solid #c5cedb;
+  border-radius: 10px;
+  font: inherit;
+  background: #fff;
+  color: var(--texte);
+}
+input:focus,
+select:focus {
+  border-color: var(--lagune-2);
+  outline: none;
+  box-shadow: 0 0 0 3px #15508a33;
+}
+input[type="checkbox"] {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--lagune);
+}
+.champ {
+  margin-bottom: 1rem;
+}
+.champ.invalide input,
+.champ.invalide select {
+  border-color: var(--brique);
+}
+.erreur-champ {
+  color: var(--brique);
+  font-size: 0.88rem;
+  margin: 0.3rem 0 0;
+}
+.case {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.case label {
+  margin: 0;
+}
+.grille-form {
+  display: grid;
+  gap: 0 1rem;
+  grid-template-columns: 1fr;
+}
+
+/* ---------- messages flash ---------- */
+.messages {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.message {
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border-left: 5px solid;
+  background: #fff;
+  font-weight: 500;
+}
+.message.succes {
+  border-color: var(--palmier);
+  background: #e8f6ef;
+}
+.message.erreur {
+  border-color: var(--brique);
+  background: #fdeceb;
+}
+.message.info {
+  border-color: var(--lagune-2);
+  background: #e8f0fa;
+}
+
+/* ---------- plaque d'immatriculation ---------- */
+.plaque {
+  display: inline-flex;
+  align-items: stretch;
+  border: 2px solid #1b2230;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+  font-family: "Courier New", monospace;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+.plaque::before {
+  content: "CM";
+  background: var(--lagune);
+  color: #fff;
+  font-size: 0.62rem;
+  padding: 0.35rem 0.3rem;
+  display: flex;
+  align-items: flex-end;
+}
+.plaque span {
+  padding: 0.3rem 0.5rem;
+  color: #1b2230;
+}
+
+/* ---------- accueil ---------- */
+.hero {
+  background: linear-gradient(160deg, var(--lagune) 55%, var(--lagune-2));
+  color: #fff;
+  padding: 2.5rem 0 0;
+  overflow: hidden;
+}
+.hero h1 {
+  color: #fff;
+  font-size: 2.2rem;
+  max-width: 15ch;
+}
+.hero p {
+  color: #d5e2f2;
+  max-width: 46ch;
+}
+.hero-grille {
+  display: grid;
+  gap: 1.5rem;
+}
+.hero-image {
+  align-self: end;
+  margin-bottom: -6px;
+  animation: arrivee 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes arrivee {
+  from {
+    transform: translateX(60px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.ligne-route {
+  height: 10px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--soleil) 0 32px,
+    transparent 32px 56px
+  );
+  margin-top: 4px;
+}
+.recherche {
+  background: #fff;
+  color: var(--texte);
+  border-radius: var(--rayon);
+  padding: 1.1rem;
+  display: grid;
+  gap: 0.8rem;
+  box-shadow: 0 12px 30px #0b2a4a40;
+  max-width: 620px;
+}
+.section {
+  padding: 2.5rem 0;
+}
+.grille-cartes {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+.categorie {
+  background: var(--carte);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1.2rem;
+  border-top: 5px solid var(--soleil);
+}
+.categorie .prix {
+  font-family: var(--police-titre);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--lagune);
+}
+.etapes {
+  display: grid;
+  gap: 1rem;
+  counter-reset: etape;
+}
+.etape {
+  counter-increment: etape;
+  display: grid;
+  grid-template-columns: 2.6rem 1fr;
+  gap: 0.8rem;
+  align-items: start;
+}
+.etape::before {
+  content: counter(etape);
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: var(--soleil);
+  color: #2a2200;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  font-family: var(--police-titre);
+}
+.bandeau {
+  background: var(--lagune);
+  color: #fff;
+}
+.chiffres {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  text-align: center;
+  padding: 1.6rem 0;
+}
+.chiffres strong {
+  display: block;
+  font-family: var(--police-titre);
+  font-size: 2rem;
+  color: var(--soleil);
+}
+
+/* ---------- cartes véhicules ---------- */
+.carte-vehicule {
+  background: var(--carte);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.carte-vehicule .visuel {
+  background: linear-gradient(180deg, #e6eef7, #f8fafc);
+  padding: 1rem 1rem 0.2rem;
+}
+.carte-vehicule .corps {
+  padding: 1rem 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+.carte-vehicule h3 {
+  margin: 0;
+}
+.etiquettes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.etiquette {
+  background: #eef2f8;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--lagune);
+}
+.carte-vehicule .prix {
+  font-size: 1.3rem;
+  font-weight: 800;
+  font-family: var(--police-titre);
+  color: var(--lagune);
+}
+.carte-vehicule .prix small {
+  font-weight: 500;
+  color: var(--gris);
+  font-size: 0.85rem;
+}
+.carte-vehicule .btn {
+  margin-top: auto;
+}
+
+/* ---------- catalogue ---------- */
+.filtres {
+  background: #fff;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1.1rem;
+  display: grid;
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.filtres .champ {
+  margin: 0;
+}
+.entete-liste {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.vide {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  background: #fff;
+  border: 2px dashed var(--bordure);
+  border-radius: var(--rayon);
+}
+
+/* ---------- fiche véhicule ---------- */
+.fiche {
+  display: grid;
+  gap: 1.5rem;
+  padding-block: 1.5rem 2.5rem;
+}
+.fiche-visuel {
+  background: linear-gradient(180deg, #e6eef7, #fff);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1.5rem 1.5rem 0.5rem;
+}
+.specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.specs li {
+  background: #fff;
+  border: 1px solid var(--bordure);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+.specs b {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--gris);
+  font-weight: 600;
+}
+.panneau {
+  background: #fff;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1.3rem;
+}
+.resume {
+  background: #f4f8fd;
+  border: 1px dashed #9bb7d6;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.resume .total {
+  font-family: var(--police-titre);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--lagune);
+}
+.resume.indisponible {
+  background: #fdeceb;
+  border-color: var(--brique);
+}
+.ligne-resume {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.95rem;
+}
+
+/* ---------- confirmation / suivi ---------- */
+.ticket {
+  background: #fff;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  max-width: 640px;
+  margin: 1.5rem auto;
+  overflow: hidden;
+}
+.ticket-tete {
+  background: var(--lagune);
+  color: #fff;
+  padding: 1.2rem 1.4rem;
+}
+.ticket-tete h1 {
+  color: #fff;
+  margin: 0 0 0.3rem;
+  font-size: 1.5rem;
+}
+.code {
+  font-family: "Courier New", monospace;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--soleil);
+}
+.ticket-corps {
+  padding: 1.2rem 1.4rem;
+}
+.ticket dl {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 0.5rem 1rem;
+  margin: 0 0 1rem;
+}
+.ticket dt {
+  color: var(--gris);
+}
+.ticket dd {
+  margin: 0;
+  font-weight: 600;
+}
+.pastille {
+  display: inline-block;
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.pastille.demandee {
+  background: #fff3cd;
+  color: #6b5200;
+}
+.pastille.confirmee {
+  background: #dbeafe;
+  color: #123c77;
+}
+.pastille.en_cours {
+  background: #d9f2e6;
+  color: #0f5a3a;
+}
+.pastille.terminee {
+  background: #e5e8ee;
+  color: #3b4455;
+}
+.pastille.annulee {
+  background: #fbdcda;
+  color: #8a1f19;
+}
+
+/* ---------- administration ---------- */
+.titre-page {
+  padding-top: 1.5rem;
+}
+.kpis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.kpi {
+  background: #fff;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1rem;
+}
+.kpi strong {
+  display: block;
+  font-family: var(--police-titre);
+  font-size: 2rem;
+  color: var(--lagune);
+}
+.kpi.alerte strong {
+  color: var(--brique);
+}
+.deux-colonnes {
+  display: grid;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.alerte-ligne {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--bordure);
+  flex-wrap: wrap;
+}
+.alerte-ligne:last-child {
+  border: 0;
+}
+.badge-alerte {
+  background: #fdeceb;
+  color: var(--brique);
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.tableau-conteneur {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+th,
+td {
+  text-align: left;
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid var(--bordure);
+  vertical-align: middle;
+}
+th {
+  background: #eaf0f7;
+  color: var(--lagune);
+  font-size: 0.9rem;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.actions form {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin: 0;
+}
+.actions input[type="number"] {
+  width: 7.5rem;
+  padding: 0.4rem 0.6rem;
+}
+.filtres-statut {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.filtres-statut a {
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--bordure);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--gris);
+}
+.filtres-statut a[aria-current="true"] {
+  background: var(--lagune);
+  color: #fff;
+  border-color: var(--lagune);
+}
+.pagination {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.barre {
+  background: #e5ebf3;
+  border-radius: 999px;
+  height: 12px;
+  overflow: hidden;
+  min-width: 80px;
+}
+.barre > i {
+  display: block;
+  height: 100%;
+  background: var(--lagune-2);
+  border-radius: 999px;
+}
+.barre > i.vert {
+  background: var(--palmier);
+}
+.negatif {
+  color: var(--brique);
+  font-weight: 700;
+}
+.positif {
+  color: var(--palmier);
+  font-weight: 700;
+}
+.connexion {
+  max-width: 420px;
+  margin: 2.5rem auto;
+}
+
+/* ---------- erreurs ---------- */
+.page-erreur {
+  text-align: center;
+  padding: 3.5rem 1rem;
+}
+.page-erreur .gros {
+  font-family: var(--police-titre);
+  font-size: 5.5rem;
+  font-weight: 800;
+  color: var(--lagune);
+  line-height: 1;
+}
+.page-erreur .gros span {
+  color: var(--soleil-fonce);
+}
+
+/* ---------- pied de page ---------- */
+.pied {
+  background: #0a2c4d;
+  color: #b9c9dc;
+  margin-top: 2rem;
+  padding: 1.5rem 0;
+  font-size: 0.92rem;
+}
+.pied a {
+  color: var(--soleil);
+}
+
+/* ---------- tableaux en « fiches » sur téléphone ---------- */
+@media (max-width: 719px) {
+  table.adaptatif thead {
+    position: absolute;
+    left: -9999px;
+  }
+  table.adaptatif tr {
+    display: block;
+    border: 1px solid var(--bordure);
+    border-radius: 12px;
+    margin-bottom: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+  table.adaptatif td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 0;
+    padding: 0.35rem 0;
+    text-align: right;
+  }
+  table.adaptatif td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--gris);
+    text-align: left;
+  }
+  table.adaptatif td.actions-cellule {
+    display: block;
+    text-align: left;
+  }
+  table.adaptatif td.actions-cellule::before {
+    display: none;
+  }
+}
+
+/* ---------- tablette (≥ 640px) ---------- */
+@media (min-width: 640px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  .hero h1 {
+    font-size: 3rem;
+  }
+  .grille-cartes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .recherche {
+    grid-template-columns: 1fr 1fr;
+  }
+  .recherche .btn {
+    grid-column: 1 / -1;
+  }
+  .grille-form {
+    grid-template-columns: 1fr 1fr;
+  }
+  .filtres {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .kpis {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .etapes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- ordinateur (≥ 960px) ---------- */
+@media (min-width: 960px) {
+  .burger {
+    display: none;
+  }
+  .menu {
+    display: block;
+    position: static;
+    background: none;
+    padding: 0;
+  }
+  .menu ul {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+  }
+  .menu a,
+  .menu button.lien {
+    padding: 0.4rem 0;
+    width: auto;
+  }
+  .hero {
+    padding-top: 3.5rem;
+  }
+  .hero-grille {
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+  }
+  .grille-cartes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grille-cartes.quatre {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .filtres {
+    grid-template-columns: 1.3fr 0.7fr 1fr 1fr;
+  }
+  .fiche {
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: start;
+  }
+  .panneau.collant {
+    position: sticky;
+    top: 80px;
+  }
+  .deux-colonnes {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media print {
+  .entete,
+  .barre-admin,
+  .pied,
+  .btn {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}
+
+/* ---------- utilitaires ---------- */
+.sr-seulement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

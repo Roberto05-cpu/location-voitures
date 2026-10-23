@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block titre %}Flotte{% endblock %}
+{% block contenu %}
+<div class="conteneur titre-page">
+  <h1>Flotte</h1>
+  <div class="tableau-conteneur">
+    <table class="adaptatif">
+      <thead><tr><th>Véhicule</th><th>Catégorie</th><th>Places</th><th>Kilométrage</th><th>État</th><th>Action</th></tr></thead>
+      <tbody>
+      {% for v in flotte %}
+      <tr>
+        <td data-label="Véhicule">{{ v.marque }} {{ v.modele }}<br><span class="plaque"><span>{{ v.immatriculation }}</span></span></td>
+        <td data-label="Catégorie">{{ v.categorie }}</td>
+        <td data-label="Places">{{ v.places }}</td>
+        <td data-label="Kilométrage">{{ '{:,}'.format(v.kilometrage).replace(',', ' ') }} km</td>
+        <td data-label="État">{% if v.disponible %}<span class="pastille en_cours">En service</span>{% else %}<span class="pastille annulee">Hors service</span>{% endif %}</td>
+        <td class="actions-cellule">
+          <form method="post" action="{{ url_for('basculer_service', vid=v.id) }}" data-confirm="Changer l'état de ce véhicule ?">
+            <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+            <button class="btn btn-contour btn-petit" type="submit">{{ 'Mettre hors service' if v.disponible else 'Remettre en service' }}</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <section class="panneau" style="margin-top:1.5rem" aria-labelledby="t-ajout">
+    <h2 id="t-ajout">Ajouter un véhicule</h2>
+    <form method="post" data-valider novalidate>
+      <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+      <div class="grille-form">
+        <div class="champ{{ ' invalide' if erreurs.immatriculation }}">
+          <label for="immatriculation">Immatriculation</label>
+          <input type="text" id="immatriculation" name="immatriculation" value="{{ form.immatriculation }}" placeholder="LT-123-AB" data-regle="requis" required>
+          {% if erreurs.immatriculation %}<p class="erreur-champ">{{ erreurs.immatriculation }}</p>{% endif %}
+        </div>
+        <div class="champ{{ ' invalide' if erreurs.marque }}">
+          <label for="marque">Marque</label>
+          <input type="text" id="marque" name="marque" value="{{ form.marque }}" data-regle="requis" required>
+          {% if erreurs.marque %}<p class="erreur-champ">{{ erreurs.marque }}</p>{% endif %}
+        </div>
+        <div class="champ{{ ' invalide' if erreurs.modele }}">
+          <label for="modele">Modèle</label>
+          <input type="text" id="modele" name="modele" value="{{ form.modele }}" data-regle="requis" required>
+          {% if erreurs.modele %}<p class="erreur-champ">{{ erreurs.modele }}</p>{% endif %}
+        </div>
+        <div class="champ{{ ' invalide' if erreurs.categorie }}">
+          <label for="categorie">Catégorie</label>
+          <select id="categorie" name="categorie" data-regle="requis" required>
+            <option value="">Choisir…</option>
+            {% for c in categories %}<option value="{{ c.id }}"{% if form.categorie == c.id|string %} selected{% endif %}>{{ c.nom }}</option>{% endfor %}
+          </select>
+          {% if erreurs.categorie %}<p class="erreur-champ">{{ erreurs.categorie }}</p>{% endif %}
+        </div>
+        <div class="champ{{ ' invalide' if erreurs.places }}">
+          <label for="places">Places</label>
+          <input type="number" id="places" name="places" min="1" max="60" value="{{ form.places }}" data-regle="entier" required>
+          {% if erreurs.places %}<p class="erreur-champ">{{ erreurs.places }}</p>{% endif %}
+        </div>
+        <div class="champ{{ ' invalide' if erreurs.boite }}">
+          <label for="boite">Boîte de vitesses</label>
+          <select id="boite" name="boite" data-regle="requis" required>
+            <option value="">Choisir…</option>
+            <option value="manuelle"{% if form.boite == 'manuelle' %} selected{% endif %}>Manuelle</option>
+            <option value="automatique"{% if form.boite == 'automatique' %} selected{% endif %}>Automatique</option>
+          </select>
+          {% if erreurs.boite %}<p class="erreur-champ">{{ erreurs.boite }}</p>{% endif %}
+        </div>
+        <div class="champ{{ ' invalide' if erreurs.kilometrage }}">
+          <label for="kilometrage">Kilométrage actuel</label>
+          <input type="number" id="kilometrage" name="kilometrage" min="0" value="{{ form.kilometrage }}" data-regle="entier" required>
+          {% if erreurs.kilometrage %}<p class="erreur-champ">{{ erreurs.kilometrage }}</p>{% endif %}
+        </div>
+        <div class="champ{{ ' invalide' if erreurs.photo }}">
+          <label for="photo">Illustration</label>
+          <select id="photo" name="photo" data-regle="requis" required>
+            {% for i in images %}<option value="{{ i }}"{% if form.photo == i %} selected{% endif %}>{{ i[:-4].replace('_', ' ') }}</option>{% endfor %}
+          </select>
+          {% if erreurs.photo %}<p class="erreur-champ">{{ erreurs.photo }}</p>{% endif %}
+        </div>
+      </div>
+      <button class="btn btn-principal" type="submit">Ajouter à la flotte</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

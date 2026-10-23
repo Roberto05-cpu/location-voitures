@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% from "_macros.html" import carte_vehicule %}
+{% block titre %}Catalogue des véhicules{% endblock %}
+{% block contenu %}
+<div class="conteneur titre-page">
+  <h1>Nos véhicules</h1>
+  <p class="discret">Indiquez vos dates pour ne voir que les véhicules libres. Les filtres se mettent à jour sans recharger la page.</p>
+  <form class="filtres" id="filtres" method="get" action="{{ url_for('catalogue') }}">
+    <div class="champ">
+      <label for="f-categorie">Catégorie</label>
+      <select id="f-categorie" name="categorie">
+        <option value="">Toutes</option>
+        {% for c in categories %}<option value="{{ c.id }}"{% if c.id == categorie %} selected{% endif %}>{{ c.nom }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="champ">
+      <label for="f-places">Places minimum</label>
+      <input type="number" id="f-places" name="places" min="1" max="60" value="{{ places }}">
+    </div>
+    <div class="champ">
+      <label for="f-debut">Départ</label>
+      <input type="date" id="f-debut" name="debut" min="{{ aujourdhui }}" value="{{ debut }}">
+    </div>
+    <div class="champ">
+      <label for="f-fin">Retour</label>
+      <input type="date" id="f-fin" name="fin" min="{{ aujourdhui }}" value="{{ fin }}">
+    </div>
+    <noscript><button class="btn btn-secondaire" type="submit">Filtrer</button></noscript>
+  </form>
+  <p id="erreur-filtres" class="erreur-champ" role="alert"></p>
+  <div class="entete-liste">
+    <p id="compteur" role="status"><strong>{{ vehicules|length }}</strong> véhicule{{ 's' if vehicules|length > 1 }} trouvé{{ 's' if vehicules|length > 1 }}</p>
+    {% if dates_ok %}<p class="discret">Libres du {{ debut|date_fr }} au {{ fin|date_fr }}</p>{% endif %}
+  </div>
+  <div class="grille-cartes" id="resultats">
+    {% for v in vehicules %}{{ carte_vehicule(v, debut if dates_ok else none, fin if dates_ok else none) }}
+    {% else %}
+    <div class="vide"><h3>Aucun véhicule libre</h3><p>Essayez d'autres dates, une autre catégorie ou moins de places.</p></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

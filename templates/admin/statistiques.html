@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block titre %}Statistiques{% endblock %}
+{% block contenu %}
+{% set max_rev = (stats.vehicules|map(attribute='revenu')|max) or 1 %}
+<div class="conteneur titre-page">
+  <h1>Statistiques</h1>
+  <p class="discret">Calculées sur les locations terminées. Les mêmes données sont disponibles en JSON sur <code>/api/statistiques</code>.</p>
+
+  <section class="panneau" aria-labelledby="t-rev">
+    <h2 id="t-rev">Revenu et jours de location par véhicule</h2>
+    <div class="tableau-conteneur">
+      <table class="adaptatif">
+        <thead><tr><th>Véhicule</th><th>Jours loués</th><th>Revenu</th><th></th></tr></thead>
+        <tbody>
+        {% for v in stats.vehicules %}
+        <tr><td data-label="Véhicule">{{ v.nom }} <span class="discret">{{ v.immatriculation }}</span></td><td data-label="Jours loués">{{ v.jours }}</td>
+            <td data-label="Revenu">{{ v.revenu|fcfa }}</td>
+            <td><div class="barre" role="img" aria-label="{{ (100 * v.revenu / max_rev)|round|int }} % du meilleur revenu"><i style="width: {{ (100 * v.revenu / max_rev)|round|int }}%"></i></div></td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="deux-colonnes" style="margin-top:1.2rem">
+    <section class="panneau" aria-labelledby="t-ent">
+      <h2 id="t-ent">Coût d'entretien comparé au revenu</h2>
+      <div class="tableau-conteneur">
+        <table class="adaptatif">
+          <thead><tr><th>Véhicule</th><th>Entretien</th><th>Revenu</th><th>Solde</th></tr></thead>
+          <tbody>
+          {% for v in stats.vehicules %}
+          <tr><td data-label="Véhicule">{{ v.nom }}</td><td data-label="Entretien">{{ v.entretien|fcfa }}</td><td data-label="Revenu">{{ v.revenu|fcfa }}</td>
+              <td data-label="Solde" class="{{ 'positif' if v.solde >= 0 else 'negatif' }}">{{ v.solde|fcfa }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div>
+      <section class="panneau" aria-labelledby="t-util">
+        <h2 id="t-util">Taux d'utilisation de la flotte</h2>
+        {% for m in stats.utilisation %}
+        <div class="alerte-ligne"><span>{{ m.mois }}</span>
+          <div class="barre" style="flex:1" role="img" aria-label="{{ m.taux }} %"><i class="vert" style="width: {{ [m.taux, 100]|min }}%"></i></div>
+          <strong>{{ m.taux }} %</strong></div>
+        {% endfor %}
+      </section>
+      <section class="panneau" style="margin-top:1.2rem" aria-labelledby="t-fid">
+        <h2 id="t-fid">Clients les plus fidèles</h2>
+        {% for c in stats.fideles %}
+        <div class="alerte-ligne"><span>{{ c.nom }}</span><span class="discret">{{ c.nb_locations }} location{{ 's' if c.nb_locations > 1 }} · {{ c.total|fcfa }}</span></div>
+        {% else %}<p class="discret">Pas encore de location terminée.</p>{% endfor %}
+      </section>
+    </div>
+  </div>
+</div>
+{% endblock %}

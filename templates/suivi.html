@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import resume_location %}
+{% block titre %}Suivre ma réservation{% endblock %}
+{% block contenu %}
+<div class="conteneur">
+  <section class="panneau connexion" aria-labelledby="t-suivi">
+    <h1 id="t-suivi">Suivre ma réservation</h1>
+    <form method="post" action="{{ url_for('suivi') }}" data-valider novalidate>
+      <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+      <div class="champ">
+        <label for="reference">Code de réservation</label>
+        <input type="text" id="reference" name="reference" value="{{ reference }}" maxlength="12" data-regle="requis" required>
+      </div>
+      <div class="champ">
+        <label for="telephone">Téléphone utilisé pour la réservation</label>
+        <input type="tel" id="telephone" name="telephone" value="{{ telephone }}" data-regle="tel" required>
+      </div>
+      {% if erreur %}<p class="erreur-champ" role="alert">{{ erreur }}</p>{% endif %}
+      <button class="btn btn-secondaire btn-bloc" type="submit">Afficher ma réservation</button>
+    </form>
+  </section>
+  {% if loc %}
+  <article class="ticket">
+    <div class="ticket-tete"><h2 style="color:#fff;margin:0">Réservation {{ loc.reference }}</h2></div>
+    <div class="ticket-corps">{{ resume_location(loc) }}</div>
+  </article>
+  {% endif %}
+</div>
+{% endblock %}
